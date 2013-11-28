@@ -1,4 +1,6 @@
 __author__ = 'mcguit1'
+import zipfile
+import os
 
 #start with war file
 
@@ -11,5 +13,14 @@ class Wardigester():
         return "appdigester version 0.1 alpha"
 
     def open_war(self,filename):
-        warfile = file(filename)
-        return warfile.name
+        if os.path.exists(filename):
+            zf = zipfile.ZipFile(filename,'r')
+            entrylist = zf.infolist()
+            for entry in entrylist:
+
+                print(entry.filename)
+            warfile = open(filename)
+            head,tail = os.path.split(warfile.name)
+            return tail
+        else:
+            return "dne"

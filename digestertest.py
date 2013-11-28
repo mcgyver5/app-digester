@@ -7,5 +7,6 @@ class TestDigesterFunctions(unittest.TestCase):
         self.wardigester = Wardigester()
 
     def test_open_war(self):
-        self.assertEqual('hci.war', self.wardigester.open_war('C:\Users\mcguit1\Desktop\HCI\hci.war'))
-        self.assertEqual('mrc-web.war', self.wardigester.open_war('C:\Users\mcguit1\Documents\MRC\mrc-web.war'))
+        self.assertEquals('sagedemo.war',self.wardigester.open_war("C:\\Users\\mcguit1\\JUNESAGE\\sagedemo.war"))
+        self.assertEqual('dne', self.wardigester.open_war("C:\\users\\hci.war"))
+        self.assertEqual('dne', self.wardigester.open_war("C:\\users\\mrc-web.war"))
