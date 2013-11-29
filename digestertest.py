@@ -1,5 +1,6 @@
 __author__ = 'mcguit1'
 import unittest
+import os
 from first_digester import Wardigester
 
 class TestDigesterFunctions(unittest.TestCase):
@@ -7,6 +8,11 @@ class TestDigesterFunctions(unittest.TestCase):
         self.wardigester = Wardigester()
 
     def test_open_war(self):
-        self.assertEquals('sagedemo.war',self.wardigester.open_war("C:\\Users\\mcguit1\\JUNESAGE\\sagedemo.war"))
-        self.assertEqual('dne', self.wardigester.open_war("C:\\users\\hci.war"))
-        self.assertEqual('dne', self.wardigester.open_war("C:\\users\\mrc-web.war"))
+        warfile = self.wardigester.open_war("C:\\Users\\mcguit1\\JUNESAGE\\sagedemo.war")
+        head,tail = os.path.split(warfile.name)
+        self.assertEquals('sagedemo.war',tail)
+        self.assertRaises(IOError,self.wardigester.open_war("C:\\Users\\mcguit1\\JUNESAGE\\bummer.war"))
+        self.assertRaises(ValueError,self.wardigester.open_war("C:\Users\mcguit1\JUNESAGE\build.xml"))
+
+    def test_new_file(self):
+        self.assertEquals('sagedemo_war.txt',self.wardigester.create_file("C:\\Users\\mcguit1\\JUNESAGE\\sagedemo.war"))
