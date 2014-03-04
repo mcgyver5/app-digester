@@ -1,12 +1,17 @@
 __author__ = 'mcguit1'
 import os
 import zipfile
+import Tkinter, tkFileDialog
 
 #start with war file
 
 #use py zip libraries to loop through and find all web files (jsp, xhtml, html, etc)
 
 # make a list of paths in a text file
+
+def skip():
+    pass
+
 
 class Wardigester():
     def about(self):
@@ -35,7 +40,24 @@ class Wardigester():
             head,tail = os.path.split(warfile.name)
             if not tail.endswith(".war"):
                 raise ValueError("needs a war file!")
-            return warfile
+
+            zf = zipfile.ZipFile(filename, 'r')
+            file_list = zf.infolist()
+            for entry in file_list:
+                fileNa = entry.filename
+                #exclude images, stylesheets:
+
+                extensions = ('.js','.class','.png', '.jpg','.gif','.css')
+
+                head,tail = os.path.split(fileNa)
+                if any (tail.endswith(ext) for ext in extensions):
+                    skip()
+                else:
+                    print(entry.filename + " : " + tail)
+
+            head,tail = os.path.split(filename)
+            return tail
+
         except IOError:
             print("file not found")
         except ValueError:
@@ -55,3 +77,11 @@ class Wardigester():
         head,tail = os.path.split(warfile.name)
         textfilename = tail.replace(".","_")
         return textfilename+".txt"
+
+w = Wardigester()
+
+root = Tkinter.Tk()
+root.withdraw()
+
+file_path = tkFileDialog.askopenfilename()
+w.open_war(file_path)
