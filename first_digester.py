@@ -37,12 +37,16 @@ class Wardigester():
         # has to end with .war and have a valid manifest
         try:
             warfile = open(filename)
+            textfilename = self.create_file(warfile.name)
+            textfilename = "tfiles/" + textfilename
             head,tail = os.path.split(warfile.name)
             if not tail.endswith(".war"):
                 raise ValueError("needs a war file!")
 
             zf = zipfile.ZipFile(filename, 'r')
             file_list = zf.infolist()
+            print("can it open:")
+            textFile = open(textfilename,'w')
             for entry in file_list:
                 fileNa = entry.filename
                 #exclude images, stylesheets:
@@ -53,8 +57,9 @@ class Wardigester():
                 if any (tail.endswith(ext) for ext in extensions):
                     skip()
                 else:
-                    print(entry.filename + " : " + tail)
-
+                    print(entry.filename)
+                    textFile.write(entry.filename + "\n")
+            textFile.close()
             head,tail = os.path.split(filename)
             return tail
 
@@ -73,8 +78,7 @@ class Wardigester():
                 print(fn)
 
     def create_file(self, filename):
-        warfile = self.open_war(filename)
-        head,tail = os.path.split(warfile.name)
+        head,tail = os.path.split(filename)
         textfilename = tail.replace(".","_")
         return textfilename+".txt"
 
